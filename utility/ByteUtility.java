@@ -19,4 +19,17 @@ public class ByteUtility {
 		return val;
 	}
 	
+	public static byte[] concatenate(byte[]... arrays) {
+		int length = 0;
+		for (byte[] arr : arrays)
+			length += arr.length;
+		byte[] out = new byte[length];
+		int currentPosition = 0;
+		for (byte[] arr : arrays) {
+			System.arraycopy(arr, 0, out, currentPosition, arr.length);
+			currentPosition += arr.length;
+		}
+		return out;
+	}
+	
 }

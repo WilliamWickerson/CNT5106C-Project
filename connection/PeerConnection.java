@@ -72,7 +72,9 @@ public class PeerConnection {
 		if (choking)
 			return;
 		choking = true;
-		//TODO: send choke message over socket, use send()
+		byte[] length = ByteUtility.convertInt(1);
+		byte[] type = { 0 };
+		send(ByteUtility.concatenate(length, type));
 	}
 	
 	public void sendUnchoke() {
@@ -111,7 +113,10 @@ public class PeerConnection {
 	
 	private void sendPiece(int pieceNum) {
 		byte[] piece = fileHandler.read(pieceNum);
-		//TODO: send piece message with piece and pieceNum, use send()
+		byte[] length = ByteUtility.convertInt(piece.length + 4 + 1);
+		byte[] pieceNumber = ByteUtility.convertInt(pieceNum);
+		byte[] type = { 7 };
+		send(ByteUtility.concatenate(length, type, pieceNumber, piece));
 	}
 	
 	public void handleConnection() {
