@@ -2,7 +2,6 @@ package main;
 
 import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.List;
 
 import config.CommonConfig;
 import config.PeerInfo;
