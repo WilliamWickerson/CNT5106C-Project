@@ -33,11 +33,11 @@ public class Bitfield {
 		return bitArray[position];
 	}
 	
-	public int getRandomPositionNotIn(Bitfield other, List<Integer> list) {
+	public int getRandomPositionFrom(Bitfield other, List<Integer> list) {
 		//Look through our bitArray for things this has but not the others
 		ArrayList<Integer> options = new ArrayList<Integer>();
 		for (int i = 0; i < this.getSize(); i++) {
-			if (this.has(i) && !other.has(i) && !list.contains(i))
+			if (other.has(i) && !this.has(i) && !list.contains(i))
 				options.add(i);
 		}
 		//If there are some options then return a random one
