@@ -279,8 +279,8 @@ public class PeerConnection {
 		return temp;
 	}
 	
-	public boolean isFinished() {
-		return (fileState.isComplete() && peerBitfield.isComplete());
+	public boolean peerIsFinished() {
+		return peerBitfield.isComplete();
 	}
 	
 	public boolean close() {

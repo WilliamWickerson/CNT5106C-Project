@@ -94,7 +94,7 @@ public class CommonConfig {
 		return numPieces;
 	}
 	
-	public int getLastPieceSize() {
+	private int getLastPieceSize() {
 		return fileSize - (getNumPieces() - 1) * pieceSize;
 	}
 	
