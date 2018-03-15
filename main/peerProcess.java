@@ -19,15 +19,15 @@ public class peerProcess {
 		//Read config files
 		CommonConfig commonConfig = new CommonConfig();
 		PeerInfoConfig peerConfig = new PeerInfoConfig();
-		//Set up the two File IO
-		FileIO fileHandler = new FileIO(id, commonConfig);
-		Logger logger = new Logger(id);
 		//Find self in peer info, if not there then exit
 		PeerInfo myInfo = peerConfig.getPeer(id);
 		if (myInfo == null) {
 			System.out.println("Error: id not found in PeerInfo.cfg");
 			System.exit(1);
 		}
+		//Set up the two File IO
+		FileIO fileHandler = new FileIO(id, commonConfig, myInfo.getHasFile());
+		Logger logger = new Logger(id);
 		//Create a FileState to keep track of progress
 		FileState fileState = new FileState(new Bitfield(commonConfig.getNumPieces(), myInfo.getHasFile()));
 		//Open server socket for all peer connections after in the list
