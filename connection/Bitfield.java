@@ -73,6 +73,7 @@ public class Bitfield {
 		return false;
 	}
 	
+	
 	public boolean isComplete() {
 		for (int i = 0; i < this.getSize(); i++) {
 			if (!this.has(i))
@@ -83,6 +84,15 @@ public class Bitfield {
 	
 	public int getSize() {
 		return bitArray.length;
+	}
+	
+	public int getNumTrue() {
+		int count = 0;
+		for (int i = 0; i < this.getSize(); i++) {
+			if (this.has(i))
+				count++;
+		}
+		return count;
 	}
 
 }

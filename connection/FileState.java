@@ -47,6 +47,10 @@ public class FileState {
 		return bitfield.getSize();
 	}
 	
+	public int getNumPiecesOwned() {
+		return bitfield.getNumTrue();
+	}
+	
 	public byte[] getByteArray() {
 		return bitfield.getByteArray();
 	}
