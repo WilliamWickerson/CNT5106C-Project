@@ -20,9 +20,9 @@ public class Bitfield {
 	public Bitfield(int size, byte[] bitfield) {
 		bitArray = new boolean[size];
 		for (int i = 0; i < size; i++) {
-			int bitfieldPos = i / 8;
+			int bit = 128 >> (i % 8);
+			bitArray[i] = (bitfield[i / 8] & bit) != 0;
 		}
-		//TODO: finish this
 	}
 	
 	public void add(int position) {
@@ -49,7 +49,20 @@ public class Bitfield {
 	}
 	
 	public byte[] getByteArray() {
-		//TODO: convert to byte array
+		//Get the size and size of the array
+		int size = this.getSize();
+		int arrSize = (size % 8 == 0) ? size / 8 : size / 8 + 1;
+		byte[] arr = new byte[arrSize];
+		//Zero out the byte array so that we can add to an empty list
+		for (int i = 0; i < arrSize; i++) {
+			arr[i] = 0;
+		}
+		//Add values to the byte array with logical or
+		for (int i = 0; i < size; i++) {
+			if (this.has(i))
+				arr[i / 8] |= 128 >> (i % 8);
+		}
+		return arr;
 	}
 	
 	public boolean isInterested(Bitfield other) {
