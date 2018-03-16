@@ -10,7 +10,6 @@ public class PeerInfo {
 	private boolean hasFile;
 	
 	protected PeerInfo(String line) {
-		//TODO: parse line from PeerInfo.cfg
 		StringTokenizer peerInfoFromLine = new StringTokenizer(line);
 		if(peerInfoFromLine.countTokens() != 4) {
 			System.out.println("Error: file format is not as specified");

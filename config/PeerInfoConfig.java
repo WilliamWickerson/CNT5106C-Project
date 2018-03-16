@@ -3,7 +3,6 @@ package config;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.lang.management.BufferPoolMXBean;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,7 +11,6 @@ public class PeerInfoConfig {
 	private ArrayList<PeerInfo> peers = new ArrayList<>();
 	
 	public PeerInfoConfig() {
-		//TODO: read in peers from PeerInfo.cfg
 		File configFile = new File("PeerInfo.cfg");
 		if (!configFile.exists()) {
 			System.out.println("Error: PeerInfo.cfg does not exist");
@@ -24,10 +22,10 @@ public class PeerInfoConfig {
 			while((tempLine = peerInfoFromCfg.readLine()) != null) {
 				this.peers.add(new PeerInfo(tempLine));
 			}
+			peerInfoFromCfg.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//peers.add(new PeerInfo(line)); //basically
 	}
 
 
