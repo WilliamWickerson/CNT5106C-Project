@@ -1,5 +1,7 @@
 package config;
 
+import java.util.StringTokenizer;
+
 public class PeerInfo {
 	
 	private int id;
@@ -9,6 +11,18 @@ public class PeerInfo {
 	
 	protected PeerInfo(String line) {
 		//TODO: parse line from PeerInfo.cfg
+		StringTokenizer peerInfoFromLine = new StringTokenizer(line);
+		if(peerInfoFromLine.countTokens() != 4) {
+			System.out.println("Error: file format is not as specified");
+			System.exit(0);
+		}
+
+		while(peerInfoFromLine.hasMoreTokens()) {
+			this.id = Integer.valueOf(peerInfoFromLine.nextToken());
+			this.hostName = peerInfoFromLine.nextToken();
+			this.port = Integer.valueOf(peerInfoFromLine.nextToken());
+			this.hasFile = Integer.valueOf(peerInfoFromLine.nextToken()) == 1 ? true : false;
+		}
 	}
 	
 	public int getId() {
