@@ -1,4 +1,4 @@
-package main;
+
 
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -72,6 +72,9 @@ public class peerProcess {
 						connection.sendHave(piece);
 					}
 				}
+				for (PeerConnection connection : connections) {
+					connection.checkStillInterested();
+				}
 			}
 			//TODO: figure out how to write this
 			if (currentTime - lastTime > commonConfig.getUnchokingInterval()) {
@@ -83,7 +86,7 @@ public class peerProcess {
 				redertimine optimistic choking
 				logger.changedOptimisticallyUnchokedNeighbor(new optimistic unchoked)
 			}
-			if (fileState.isComplete() != loggedComplete) {
+			if (fileState.isComplete() && !loggedComplete) {
 				loggedComplete = true
 				logger.completedDownload();
 			}

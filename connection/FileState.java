@@ -38,6 +38,7 @@ public class FileState {
 	}
 	
 	public List<Integer> getNewPieces() {
+		//Reset the newPieces and return handle to it
 		List<Integer> temp = newPieces;
 		newPieces = new ArrayList<Integer>();
 		return temp;
