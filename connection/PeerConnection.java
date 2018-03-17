@@ -66,7 +66,7 @@ public class PeerConnection {
 		this.peerId = peerInfo.getId();
 		try {
 			//Try to make connection to peer
-			peerSocket = new Socket(peerInfo.getHostName(), peerInfo.getPort());
+			peerSocket = new Socket(peerInfo.getHostName(), peerInfo.getPort(), null, myInfo.getPort());
 		} catch(Exception e) {
 			System.out.println("Error: could not connect to peer " + peerInfo.getId());
 			System.exit(1);
