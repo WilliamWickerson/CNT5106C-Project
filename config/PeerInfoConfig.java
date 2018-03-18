@@ -14,7 +14,7 @@ public class PeerInfoConfig {
 		File configFile = new File("PeerInfo.cfg");
 		if (!configFile.exists()) {
 			System.out.println("Error: PeerInfo.cfg does not exist");
-			System.exit(0);
+			System.exit(1);
 		}
 		String tempLine = null;
 		try{
@@ -27,8 +27,6 @@ public class PeerInfoConfig {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	public PeerInfo getPeer(int id) {
 		for (PeerInfo peer : peers) {

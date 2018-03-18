@@ -18,7 +18,7 @@ public class CommonConfig {
 		File configFile = new File("Common.cfg");
 		if (!configFile.exists()) {
 			System.out.println("Error: Common.cfg does not exist");
-			System.exit(0);
+			System.exit(1);
 		}
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(configFile));
@@ -60,7 +60,7 @@ public class CommonConfig {
 		
 	private void malformed(String location) {
 		System.out.println("Error: Common.cfg is malformed at " + location);
-		System.exit(0);
+		System.exit(1);
 	}
 	
 	public int getNumPreferredNeighbors() {

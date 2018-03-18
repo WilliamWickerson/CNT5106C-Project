@@ -10,18 +10,17 @@ public class PeerInfo {
 	private boolean hasFile;
 	
 	protected PeerInfo(String line) {
+		//Open up a stream tokenizer and make sure there are 4 tokens
 		StringTokenizer peerInfoFromLine = new StringTokenizer(line);
 		if(peerInfoFromLine.countTokens() != 4) {
 			System.out.println("Error: file format is not as specified");
-			System.exit(0);
+			System.exit(1);
 		}
-
-		while(peerInfoFromLine.hasMoreTokens()) {
-			this.id = Integer.valueOf(peerInfoFromLine.nextToken());
-			this.hostName = peerInfoFromLine.nextToken();
-			this.port = Integer.valueOf(peerInfoFromLine.nextToken());
-			this.hasFile = Integer.valueOf(peerInfoFromLine.nextToken()) == 1 ? true : false;
-		}
+		//Read in the four tokens from the line
+		this.id = Integer.valueOf(peerInfoFromLine.nextToken());
+		this.hostName = peerInfoFromLine.nextToken();
+		this.port = Integer.valueOf(peerInfoFromLine.nextToken());
+		this.hasFile = Integer.valueOf(peerInfoFromLine.nextToken()) == 1 ? true : false;
 	}
 	
 	public int getId() {
