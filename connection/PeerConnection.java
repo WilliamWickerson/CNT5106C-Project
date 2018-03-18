@@ -66,8 +66,9 @@ public class PeerConnection {
 		this.peerId = peerInfo.getId();
 		try {
 			//Try to make connection to peer
-			peerSocket = new Socket(peerInfo.getHostName(), peerInfo.getPort(), null, myInfo.getPort());
+			peerSocket = new Socket(peerInfo.getHostName(), peerInfo.getPort());
 		} catch(Exception e) {
+			e.printStackTrace();
 			System.out.println("Error: could not connect to peer " + peerInfo.getId());
 			System.exit(1);
 		}
@@ -96,16 +97,15 @@ public class PeerConnection {
 			input = peerSocket.getInputStream();
 			//If there are not enough bytes then return null
 			if (input.available() < numBytes) {
-				input.close();
 				return null;
 			}
 			//Create a buffer and read in numBytes
 			byte[] buffer = new byte[numBytes];
 			input.read(buffer);
-			//Close the stream and return the buffer
-			input.close();
 			return buffer;
 		} catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
 			System.out.println("Error: could not read from socket with peer: " + peerId);
 			return null;
 		}
@@ -117,8 +117,6 @@ public class PeerConnection {
 			//Get an output stream and write bytes to it
 			output = peerSocket.getOutputStream();
 			output.write(bytes);
-			//Close the output stream
-			output.close();
 		} catch(Exception e) {
 			System.out.println("Error: could not write to socket with peer: " + peerId);
 		}

@@ -1,5 +1,7 @@
 package utility;
 
+import java.nio.ByteBuffer;
+
 public class ByteUtility {
 
 	/**
@@ -22,11 +24,7 @@ public class ByteUtility {
 	 * @return the converted integer
 	 */
 	public static int convertToInt(byte[] bytes) {
-		int val = 0;
-		for (int i = bytes.length - 1; i >= 0; i--) {
-			val += bytes[i] << ((bytes.length - i - 1) * 8);
-		}
-		return val;
+		return ByteBuffer.wrap(bytes).getInt();
 	}
 	
 	/**
