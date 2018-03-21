@@ -41,7 +41,7 @@ public class Logger {
 	}
 	
 	public void connectedFrom(int id) {
-		//TODO: use write() it takes care of clock and newline
+		write("Peer " + myId + " is connected from Peer " + id + ".");
 	}
 	
 	public void changedPreferredNeighbors(List<Integer> ids) {

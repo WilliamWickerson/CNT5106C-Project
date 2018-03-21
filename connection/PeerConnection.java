@@ -39,13 +39,14 @@ public class PeerConnection {
 			System.out.println("Error: could not form connection from peer");
 			System.exit(1);
 		}
-		logger.connectedFrom(peerId);
 		//Read for handshake response until it comes in
 		byte[] peerHandshake = read(32);
 		while (peerHandshake == null)
 			peerHandshake = read(32);
 		//Get peer Id from the handshake message
 		this.peerId = ByteUtility.convertToInt(Arrays.copyOfRange(peerHandshake, 28, 32));
+		//Don't know which peer connected until after handshake comes in, so log then
+		logger.connectedFrom(peerId);
 		//Check for correct header and padding
 		if (!Arrays.equals(handshakeHeader, Arrays.copyOfRange(peerHandshake, 0, 18)) ||
 			!Arrays.equals(new byte[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, Arrays.copyOfRange(peerHandshake, 18, 28))) {
