@@ -22,8 +22,7 @@ public class FileState {
 	}
 	
 	public void ignoredPiece(int piece) {
-		if (piece != -1)
-			activePieces.remove(new Integer(piece));
+		activePieces.remove(new Integer(piece));
 	}
 	
 	public int getRandomRequest(Bitfield other) {

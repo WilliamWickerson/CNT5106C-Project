@@ -22,31 +22,37 @@ public class CommonConfig {
 		}
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(configFile));
+			//Read and parse first line
 			String line = reader.readLine();
 			String[] parts = line.split(" ");
 			if (!parts[0].equals("NumberOfPreferredNeighbors"))
 				malformed("NumberOfPreferredNeighbors");
 			this.numPreferredNeighbors = Integer.parseInt(parts[1]);
+			//Read and parse second line
 			line = reader.readLine();
 			parts = line.split(" ");
 			if (!parts[0].equals("UnchokingInterval"))
 				malformed("UnchokingInterval");
 			this.unchokingInterval = Duration.ofSeconds(Integer.parseInt(parts[1]));
+			//Read and parse third line
 			line = reader.readLine();
 			parts = line.split(" ");
 			if (!parts[0].equals("OptimisticUnchokingInterval"))
 				malformed("OptimisticUnchokingInterval");
-			this.unchokingInterval = Duration.ofSeconds(Integer.parseInt(parts[1]));
+			this.optimisticUnchokingInterval = Duration.ofSeconds(Integer.parseInt(parts[1]));
+			//Read and parse fourth line
 			line = reader.readLine();
 			parts = line.split(" ");
 			if (!parts[0].equals("FileName"))
 				malformed("FileName");
 			this.fileName = parts[1];
+			//Read and parse fifth line
 			line = reader.readLine();
 			parts = line.split(" ");
 			if (!parts[0].equals("FileSize"))
 				malformed("FileSize");
 			this.fileSize = Integer.parseInt(parts[1]);
+			//Read and parse sixth line
 			line = reader.readLine();
 			parts = line.split(" ");
 			if (!parts[0].equals("PieceSize"))

@@ -24,9 +24,10 @@ public class PeerConnection {
 	private int dataReceived = 0;
 	private int currentPiece = -1;
 	@SuppressWarnings("unused") //Java's too stupid to realize this is being used...
-	private boolean choked = false;
+	private boolean choked = true;
 	private boolean choking = true;
 	private boolean interested = false;
+	private boolean interesting = false;
 	
 	public PeerConnection(ServerSocket serverSocket, FileState fileState, FileIO fileHandler, Logger logger, PeerInfo myInfo) {
 		this.fileState = fileState;
@@ -58,6 +59,8 @@ public class PeerConnection {
 		//If we own any pieces then send our bitfield as well
 		if (fileState.getNumPiecesOwned() > 0)
 			sendBitfield();
+		//Set an empty bitfield until we receive the peers
+		peerBitfield = new Bitfield(fileState.getNumPieces(), false);
 	}
 	
 	public PeerConnection(FileState fileState, FileIO fileHandler, Logger logger, PeerInfo myInfo, PeerInfo peerInfo) {
@@ -89,6 +92,8 @@ public class PeerConnection {
 		}
 		//Since we started the connection, we always send our bitfield
 		sendBitfield();
+		//We don't know if we'll receive a bitfield so set an empty one
+		peerBitfield = new Bitfield(fileState.getNumPieces(), false);
 	}
 	
 	private byte[] read(int numBytes) {
@@ -105,9 +110,9 @@ public class PeerConnection {
 			input.read(buffer);
 			return buffer;
 		} catch(Exception e) {
+			System.out.println("Error: could not read from socket with peer: " + peerId);
 			e.printStackTrace();
 			System.exit(1);
-			System.out.println("Error: could not read from socket with peer: " + peerId);
 			return null;
 		}
 	}
@@ -191,10 +196,16 @@ public class PeerConnection {
 	
 	public void handleConnection() {
 		byte[] lengthBuffer;
+		//While there are messages read in the first 4 bytes to see their lengths
 		while ((lengthBuffer = read(4)) != null) {
 			int length = ByteUtility.convertToInt(lengthBuffer);
+			//Read in the length of the message
 			byte[] buffer = read(length);
+			//Keep reading while the message hasn't fully come in yet
+			while (buffer == null)
+				buffer = read(length);
 			int type = buffer[0];
+			//Switch over the type of the message to figure out how to respond
 			switch(type) {
 				case 0: //choke
 					choked = true;
@@ -204,16 +215,18 @@ public class PeerConnection {
 					break;
 				case 1: //unchoke
 					choked = false;
+					//Since we're unchoked, it's time to ask for a new piece
 					currentPiece = fileState.getRandomRequest(peerBitfield);
-					sendRequest(currentPiece);
+					if (currentPiece != -1)
+						sendRequest(currentPiece);
 					logger.receivedUnchoked(peerId);
 					break;
 				case 2: //interested
-					//TODO: Does this do anything?
+					interesting = true;
 					logger.receivedInterested(peerId);
 					break;
 				case 3: //not interested
-					//TODO: Does this do anything?
+					interesting = false;
 					logger.receivedNotInterested(peerId);
 					break;
 				case 4: //have
@@ -230,8 +243,11 @@ public class PeerConnection {
 					logger.receivedHave(peerId, pieceNum);
 					break;
 				case 5: //bitfield
+					//This should only happen at connection start
 					byte[] bitfieldBuffer = Arrays.copyOfRange(buffer, 1, buffer.length);
+					//Translate peer bitfield from byte array
 					peerBitfield = new Bitfield(fileState.getNumPieces(), bitfieldBuffer);
+					//Send interested if interested, otherwise send not interested
 					if (fileState.isInterested(peerBitfield)) {
 						sendInterested();
 					}
@@ -240,6 +256,7 @@ public class PeerConnection {
 					}
 					break;
 				case 6: //request
+					//Only need to respond to request if we are not choking the peer
 					if (!choking) {
 						pieceNumBuffer = Arrays.copyOfRange(buffer, 1, buffer.length);
 						pieceNum = ByteUtility.convertToInt(pieceNumBuffer);
@@ -247,13 +264,20 @@ public class PeerConnection {
 					}
 					break;
 				case 7: //piece
+					//Get the piece number and the byte[] piece from the message
 					pieceNumBuffer = Arrays.copyOfRange(buffer, 1, 5);
 					byte[] pieceBuffer = Arrays.copyOfRange(buffer, 5, buffer.length);
 					pieceNum = ByteUtility.convertToInt(pieceNumBuffer);
+					//Increment the data received and write to file
 					dataReceived += pieceBuffer.length;
 					fileHandler.write(pieceNum, pieceBuffer);
+					//Update the fileState and log that the piece has arrived
 					fileState.receivedPiece(pieceNum);
 					logger.receivedPiece(peerId, pieceNum);
+					//Send out a request for a new piece
+					currentPiece = fileState.getRandomRequest(peerBitfield);
+					if (currentPiece != -1)
+						sendRequest(currentPiece);
 					break;
 			}
 		}
@@ -268,8 +292,20 @@ public class PeerConnection {
 		}
 	}
 	
+	public int getPeerId() {
+		return peerId;
+	}
+	
+	public boolean getChoking() {
+		return choking;
+	}
+	
 	public boolean getInterested() {
 		return interested;
+	}
+	
+	public boolean getPeerInterested() {
+		return interesting;
 	}
 	
 	public int getDataReceived() {

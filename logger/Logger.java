@@ -76,7 +76,7 @@ public class Logger {
 		//TODO: use write() it takes care of clock and newline
 	}
 	
-	public void completedDownload() {
+	public void completedDownload(int id) {
 		//TODO: use write() it takes care of clock and newline
 	}
 }
