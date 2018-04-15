@@ -45,38 +45,43 @@ public class Logger {
 	}
 	
 	public void changedPreferredNeighbors(List<Integer> ids) {
-		//TODO: use write() it takes care of clock and newline
+		String idList = "";
+		if (ids.size() > 0)
+			idList = Integer.toString(ids.get(0));
+		for (int i = 1; i < ids.size(); i++)
+			idList = idList + "," + Integer.toString(ids.get(i));
+		write("Peer " + myId + " has the preferred neighbors " + idList + ".");
 	}
 	
 	public void changedOptimisticallyUnchokedNeighbor(int id) {
-		//TODO: use write() it takes care of clock and newline
+		write("Peer " + myId + " has the optimistically unchoked neighbor " + id + ".");
 	}
 	
 	public void receivedUnchoked(int id) {
-		//TODO: use write() it takes care of clock and newline
+		write("Peer " + myId + " is unchoked by " + id + ".");
 	}
 	
 	public void receivedChoking(int id) {
-		//TODO: use write() it takes care of clock and newline
+		write("Peer " + myId + " is choked by " + id + ".");
 	}
 	
 	public void receivedHave(int id, int pieceNum) {
-		//TODO: use write() it takes care of clock and newline
+		write("Peer " + myId + " received the 'have' message from " + id + " for the piece " + pieceNum + ".");
 	}
 	
 	public void receivedInterested(int id) {
-		//TODO: use write() it takes care of clock and newline
+		write("Peer " + myId + " received the 'interested' message from " + id + ".");
 	}
 	
 	public void receivedNotInterested(int id) {
-		//TODO: use write() it takes care of clock and newline
+		write("Peer " + myId + " received the 'not interested' message from " + id + ".");
 	}
 	
-	public void receivedPiece(int id, int pieceNum) {
-		//TODO: use write() it takes care of clock and newline
+	public void receivedPiece(int id, int pieceNum, int numPieces) {
+		write("Peer " + myId + " has downloaded the piece " + pieceNum + " from " + id + ". Now the number of pieces it has is " + numPieces + ".");
 	}
 	
 	public void completedDownload(int id) {
-		//TODO: use write() it takes care of clock and newline
+		write("Peer " + id + " has downloaded the complete file.");
 	}
 }

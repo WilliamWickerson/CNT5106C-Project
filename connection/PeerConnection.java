@@ -273,7 +273,7 @@ public class PeerConnection {
 					fileHandler.write(pieceNum, pieceBuffer);
 					//Update the fileState and log that the piece has arrived
 					fileState.receivedPiece(pieceNum);
-					logger.receivedPiece(peerId, pieceNum);
+					logger.receivedPiece(peerId, pieceNum, fileState.getNumPiecesOwned());
 					//Send out a request for a new piece
 					currentPiece = fileState.getRandomRequest(peerBitfield);
 					if (currentPiece != -1)
