@@ -1,11 +1,8 @@
-
-
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
 import config.CommonConfig;
 import config.PeerInfo;
 import config.PeerInfoConfig;
@@ -20,8 +17,15 @@ public class peerProcess {
 	private static Random rand = new Random();
 	
 	public static void main(String[] args) {
+
+		//check if the execution contains any arguments 
+		if (args.length < 1) {
+			System.out.println("Error(Aborting execution): PeerID Missing \n\n Usage: java peerProcess <peerID>");
+			return;
+		}
+
 		//Get id from command line input
-		int id = Integer.parseInt(args[0]);
+		int id = Integer.parseInt(args[0]);		// current peer id
 		//Read config files
 		CommonConfig commonConfig = new CommonConfig();
 		PeerInfoConfig peerConfig = new PeerInfoConfig();
