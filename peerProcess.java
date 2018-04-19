@@ -40,6 +40,8 @@ public class peerProcess {
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(myInfo.getPort());
+			//Set the server socket timeout so that serverSocket.accept() does not wait forever on error
+			serverSocket.setSoTimeout(10000);
 		} catch (Exception e) {
 			System.out.println("Error: could not bind to port " + myInfo.getPort());
 			System.exit(1);

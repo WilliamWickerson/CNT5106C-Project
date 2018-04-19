@@ -18,7 +18,7 @@ public class PeerConnection {
 	private FileIO fileHandler;
 	private Logger logger;
 	//Own private data
-	private Socket peerSocket;
+	private Socket peerSocket = null;
 	private Bitfield peerBitfield;
 	private int peerId;
 	private int dataReceived = 0;
@@ -37,7 +37,7 @@ public class PeerConnection {
 			//Wait for connection from next peer
 			peerSocket = serverSocket.accept();
 		} catch(Exception e) {
-			System.out.println("Error: could not form connection from peer");
+			System.out.println("Error: did not receive connection from peer");
 			System.exit(1);
 		}
 		//Read for handshake response until it comes in
@@ -68,12 +68,19 @@ public class PeerConnection {
 		this.fileHandler = fileHandler;
 		this.logger = logger;
 		this.peerId = peerInfo.getId();
-		try {
-			//Try to make connection to peer
-			peerSocket = new Socket(peerInfo.getHostName(), peerInfo.getPort());
-		} catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("Error: could not connect to peer " + peerInfo.getId());
+		//Keep trying to connect to the peer until connection is made or until timeout
+		long startTime = System.currentTimeMillis();
+		while ((peerSocket == null) && (System.currentTimeMillis() - startTime < 10000)) {
+			try {
+				//Try to make connection to peer
+				peerSocket = new Socket(peerInfo.getHostName(), peerInfo.getPort());
+			} catch(Exception e) {
+				//Peer server socket not set up yet, keep trying
+			}
+		}
+		//If a connection was not established in the given time, exit
+		if (peerSocket == null) {
+			System.out.println("Error: could not form connection from peer " + peerInfo.getId());
 			System.exit(1);
 		}
 		logger.connectedTo(peerId);

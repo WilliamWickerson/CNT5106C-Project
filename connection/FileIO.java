@@ -47,6 +47,7 @@ public class FileIO {
 			return pieceBuffer;
 		} catch (Exception e) {
 			System.out.println("Error: could not read piece " + piece);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -66,7 +67,9 @@ public class FileIO {
 	
 	public void finalize() {
 		//Since we've been writing to <filePath>.temp rename to <filePath>
-		file.renameTo(new File(filePath));
+		File completedFile = new File(filePath);
+		file.renameTo(completedFile);
+		file = completedFile;
 	}
 
 }
