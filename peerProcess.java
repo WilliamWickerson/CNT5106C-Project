@@ -80,10 +80,8 @@ public class peerProcess {
 		//Keep track of the preferredNeighbors and optimistically unchoked neighbor
 		List<PeerConnection> preferredNeighbors = new ArrayList<PeerConnection>();
 		PeerConnection optimisticNeighbor = null;
-		//Set up initial preferred neighbors and optimistic neighbor so we don't wait for first interval
-		preferredNeighbors = handleUnchoking(connections, preferredNeighbors, optimisticNeighbor, commonConfig.getNumPreferredNeighbors(), fileState.isComplete(), logger);
-		optimisticNeighbor = handleOptimisticUnchoking(connections, preferredNeighbors, optimisticNeighbor, logger);
 		
+		//While all peers have not finished the download, keep doing the main loop
 		while (!finished(connections) || !fileState.isComplete()) {
 			//Let all connections handle all incoming messages
 			for(PeerConnection connection : connections) {
