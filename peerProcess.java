@@ -80,6 +80,9 @@ public class peerProcess {
 		//Keep track of the preferredNeighbors and optimistically unchoked neighbor
 		List<PeerConnection> preferredNeighbors = new ArrayList<PeerConnection>();
 		PeerConnection optimisticNeighbor = null;
+		//Set up initial preferred neighbors and optimistic neighbor so we don't wait for first interval
+		preferredNeighbors = handleUnchoking(connections, preferredNeighbors, optimisticNeighbor, commonConfig.getNumPreferredNeighbors(), fileState.isComplete(), logger);
+		optimisticNeighbor = handleOptimisticUnchoking(connections, preferredNeighbors, optimisticNeighbor, logger);
 		
 		while (!finished(connections) || !fileState.isComplete()) {
 			//Let all connections handle all incoming messages
@@ -193,7 +196,7 @@ public class peerProcess {
 		PeerConnection optimisticNeighbor = candidates.get(rand.nextInt(candidates.size()));
 		optimisticNeighbor.sendUnchoke();
 		//Choke the previous neighbor if it's not currently a preferred neighbor
-		if (!preferredNeighbors.contains(previousOptimisticNeighbor))
+		if ((previousOptimisticNeighbor != null) && !preferredNeighbors.contains(previousOptimisticNeighbor))
 			previousOptimisticNeighbor.sendChoke();
 		//Log the new optimistic neighbor and return it
 		logger.changedOptimisticallyUnchokedNeighbor(optimisticNeighbor.getPeerId());
