@@ -77,7 +77,7 @@ public class StartRemotePeers {
 				/*
 				* Give the path to your private key. Make sure your public key
 				* is already within your remote CISE machine to ssh into it
-				* without a password. Or you can use the corressponding method
+				* without a password. Or you can use the corresponding method
 				* of JSch which accepts a password.
 				*/
 				jsch.addIdentity("C:\\Users\\Willie\\.ssh\\CNT5106C", "");
@@ -128,7 +128,6 @@ public class StartRemotePeers {
 				}).start();
 				
 			} catch (JSchException e) {
-				// TODO Auto-generated catch block
 				System.out.println(remotePeer.getPeerID() + " JSchException >:");
 				e.printStackTrace();
 			} catch (IOException ex) {

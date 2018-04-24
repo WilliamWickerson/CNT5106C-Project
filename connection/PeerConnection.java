@@ -80,7 +80,7 @@ public class PeerConnection {
 		}
 		//If a connection was not established in the given time, exit
 		if (peerSocket == null) {
-			System.out.println("Error: could not form connection from peer " + peerInfo.getId());
+			System.out.println("Error: could not form connection to peer " + peerInfo.getId());
 			System.exit(1);
 		}
 		logger.connectedTo(peerId);
