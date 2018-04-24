@@ -28,7 +28,7 @@ public class FileState {
 	public int getRandomRequest(Bitfield other) {
 		int piece = bitfield.getRandomPositionFrom(other, activePieces);
 		if (piece != -1)
-			activePieces.add(piece);
+			activePieces.add(new Integer(piece));
 		return piece;
 	}
 	

@@ -216,6 +216,7 @@ public class PeerConnection {
 			switch(type) {
 				case 0: //choke
 					choked = true;
+					//If choked then we can't expect peer to give currentPiece
 					fileState.ignoredPiece(currentPiece);
 					currentPiece = -1;
 					logger.receivedChoking(peerId);
@@ -281,10 +282,14 @@ public class PeerConnection {
 					//Update the fileState and log that the piece has arrived
 					fileState.receivedPiece(pieceNum);
 					logger.receivedPiece(peerId, pieceNum, fileState.getNumPiecesOwned());
-					//Send out a request for a new piece
-					currentPiece = fileState.getRandomRequest(peerBitfield);
-					if (currentPiece != -1)
-						sendRequest(currentPiece);
+					//Send out a request for a new piece if this was expected piece
+					//If peer responds to a piece after choking, can get in a string
+					//of double sending and the duplicate might clog active pieces
+					if (currentPiece == pieceNum) {
+						currentPiece = fileState.getRandomRequest(peerBitfield);
+						if (currentPiece != -1)
+							sendRequest(currentPiece);
+					}
 					break;
 			}
 		}

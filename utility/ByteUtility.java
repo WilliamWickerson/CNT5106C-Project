@@ -11,9 +11,9 @@ public class ByteUtility {
 	 */
 	public static byte[] convertInt(int i) {
 		return new byte[] {
-			(byte)(i >> 24),
-			(byte)(i >> 16),
-			(byte)(i >> 8),
+			(byte)(i >>> 24),
+			(byte)(i >>> 16),
+			(byte)(i >>> 8),
 			(byte)(i),
 		};
 	}
